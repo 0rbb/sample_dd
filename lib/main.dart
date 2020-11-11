@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scrollbar(
         controller: _scrollController,
         radius: Radius.circular(7.0),
-        child: CustomScrollView(
+        child: CustomScrollView(physics: NeverScrollableScrollPhysics(),
           controller: _scrollController,
           slivers: <Widget>[
             SliverPersistentHeader(
