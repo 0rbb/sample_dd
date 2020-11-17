@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
-import 'dart:math' as math;
 
 void main() {
   runApp(MyApp());
@@ -10,6 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(accentColor: Colors.deepOrangeAccent),
       home: MyHomePage(),
     );
   }
@@ -27,57 +27,22 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     Color _baseColor = Theme.of(context).accentColor;
 
-    ScrollController _scrollController = ScrollController();
-
-    var body = SliverList(
-        delegate: SliverChildListDelegate([
-      Container(
-        height: 230.0,
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 38.0),
-              child: Container(
-                decoration: _decoration(_baseColor),
-                child: _buildFunnelContent(),
-              ),
-            ),
-          ],
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 38.0),
+          child: Container(
+            decoration: _decoration(_baseColor, color: Colors.amber),
+            child: _buildFunnelContent(),
+          ),
         ),
-      )
-    ]));
-
-    return Container(
-      height: 300,
-      width: 100,
-      child: Scrollbar(
-        controller: _scrollController,
-        radius: Radius.circular(7.0),
-        child: CustomScrollView(physics: NeverScrollableScrollPhysics(),
-          controller: _scrollController,
-          slivers: <Widget>[
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _SliverAppBarDelegate(
-                  minHeight: 50.0,
-                  maxHeight: 100.0,
-                  child: Container(
-                      decoration: _decoration(_baseColor, color: _baseColor),
-                      child: Center(
-                          child: Text('scroll list',
-                              style: Theme.of(context)
-                                  .primaryTextTheme
-                                  .headline6)))),
-            ),
-            body
-          ],
-        ),
-      ),
+      ],
     );
   }
 
   Widget _buildFunnelContent() => Container(
         width: 170.0,
+        height: 190,
         child: DragAndDropLists(
           disableScrolling: true,
           dragHandle: Align(
@@ -87,15 +52,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Icon(Icons.drag_handle),
               )),
           children: [
-            DragAndDropList(header: Container(
-              child: Center(
+            DragAndDropList(
+              header: Center(
                 child: Text(
                   'list',
-                  style: TextStyle(color: Colors.green,
-                       fontSize: 22, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
-            ),
               children: [
                 _buildItems(context, 'Uno item'),
                 _buildItems(context, 'Duo item')
@@ -132,38 +98,6 @@ DragAndDropItem _buildItems(BuildContext context, String state) {
       ),
     ),
   ));
-}
-
-
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate({
-    @required this.minHeight,
-    @required this.maxHeight,
-    @required this.child,
-  });
-
-  final double minHeight;
-  final double maxHeight;
-  final Widget child;
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => math.max(maxHeight, minHeight);
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return new SizedBox.expand(child: child);
-  }
-
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return maxHeight != oldDelegate.maxHeight ||
-        minHeight != oldDelegate.minHeight ||
-        child != oldDelegate.child;
-  }
 }
 
 BoxDecoration _decoration(Color baseColor,

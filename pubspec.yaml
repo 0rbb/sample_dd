@@ -30,7 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.0
 
 
-  drag_and_drop_lists: ^0.2.9
+  drag_and_drop_lists: ^0.2.9+1
 
 dev_dependencies:
   flutter_test:
